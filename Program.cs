@@ -1,4 +1,5 @@
 using Bloggy.Repositories;
+using Bloggy.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<BloggyDbContext>();
+builder.Services.AddScoped<UserService>();
 
 var app = builder.Build();
 
