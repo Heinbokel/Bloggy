@@ -3,18 +3,35 @@ using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace Bloggy.Services;
 
+/// <summary>
+/// Static class containing methods for securing and working with passwords.
+/// </summary>
 public static class PasswordService {
 
+    /// <summary>
+    /// Hashes the given unhashed password and returns it as a string.
+    /// </summary>
+    /// <param name="unhashedPassword">The unhashed password to hash.</param>
+    /// <param name="salt">The randomly generated salt to apply to the hashing algorithm</param>
+    /// <returns>The hashed password as a string.</returns>
     public static string HashPassword(string unhashedPassword, byte[] salt) {
-        // Use the PBKDF2 hashing algorithm to hash the password
+        // Use the PBKDF2 hashing algorithm to hash the password.
+        // This method is provided by the Microsoft.AspNetCore.Cryptography.KeyDerivation namespace and is
+        // used to derive a cryptographic key from the password and salt using the PBKDF2 algorithm.
+        // The resulting byte array from the PBKDF2 function is converted to a Base64 string representation using Convert.ToBase64String.
+        // This is done to ensure that the hashed password can be safely stored and transmitted as text.
         return Convert.ToBase64String(KeyDerivation.Pbkdf2(
             password: unhashedPassword,
             salt: salt,
             prf: KeyDerivationPrf.HMACSHA256,
             iterationCount: 10000,
-            numBytesRequested: 256 / 8));
+            numBytesRequested: 32));
     }
 
+    /// <summary>
+    /// Randomly generates a salt to be used when hashing a password.
+    /// </summary>
+    /// <returns>The salt to be returned as a byte array.</returns>
     public static byte[] GenerateSalt() {
         /*The unique salt for each password means that the attacker cannot use precomputed tables
         * or easily apply the same cracking technique across all passwords. They would need to perform a separate cracking attempt 

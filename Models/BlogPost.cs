@@ -1,5 +1,8 @@
 namespace Bloggy.Models;
 
+/// <summary>
+/// Represents a blog post, created by a given user.
+/// </summary>
 public class BlogPost {
 
     public int Id { get; set;}
