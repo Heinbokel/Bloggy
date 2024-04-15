@@ -5,15 +5,27 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bloggy.Services;
 
+/// <summary>
+/// Service (Business Logic Layer) for working with the User entity.
+/// </summary>
 public class UserService
 {
     private readonly BloggyDbContext BloggyDbContext;
 
+    /// <summary>
+    /// Constructor for dependency injection.
+    /// </summary>
+    /// <param name="bloggyDbContext">The BloggyDbContext to provide to this class.</param>
     public UserService(BloggyDbContext bloggyDbContext)
     {
         this.BloggyDbContext = bloggyDbContext;
     }
 
+    /// <summary>
+    /// Registers a new user in Bloggy's database provided the user does not already exist.
+    /// </summary>
+    /// <param name="request">The UserRegisterRequest to register the user from.</param>
+    /// <returns>The created User to return.</returns>
     public User RegisterUser(UserRegisterRequest request)
     {
         

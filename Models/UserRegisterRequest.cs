@@ -2,6 +2,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Bloggy.Models;
 
+/// <summary>
+/// Represents the request to register a new user.
+/// </summary>
 public class UserRegisterRequest {
 
     [Required]

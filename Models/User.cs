@@ -2,6 +2,10 @@ using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 namespace Bloggy.Models;
 
+/// <summary>
+/// Represents a User of Bloggy. Password information is not sent back as part of JSON responses.
+/// Circular dependencies are resolved by not including child data that contains a reference to a User in JSON responses.
+/// </summary>
 [Index(nameof(UserName), IsUnique = true)]
 [Index(nameof(Email), IsUnique = true)]
 public class User {

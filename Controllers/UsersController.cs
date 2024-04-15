@@ -5,10 +5,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Bloggy.Controllers;
 
+/// <summary>
+/// Controller for registering new users, logging users in, and editing users.
+/// </summary>
 [ApiController]
 public class UsersController: ControllerBase {
     private readonly UserService UserService;
 
+    /// <summary>
+    /// Constructor for dependency injection.
+    /// </summary>
+    /// <param name="userService">The UserService to provide this class.</param>
     public UsersController(UserService userService) {
         this.UserService = userService;
     }
@@ -18,7 +25,6 @@ public class UsersController: ControllerBase {
     /// </summary>
     /// <param name="request">The UserRegisterRequest to register a user from.</param>
     /// <returns>The registered User to return.</returns>
-    /// <exception cref="InvalidInputException">If the UserRegisterRequest is not valid.</exception>
     [HttpPost("users", Name = "RegisterUser")]
     public User RegisterUser([FromBody]UserRegisterRequest request) {
         // The ModelState is automatically populated by .NET during model binding and validation of the UserRegisterRequest.

@@ -1,5 +1,8 @@
 namespace Bloggy.Models;
 
+/// <summary>
+/// Represents a role that a User may be given.
+/// </summary>
 public class UserRole {
 
     public int Id { get; set;}
