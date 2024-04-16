@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="microsoft.aspnetcore.authentication.jwtbearer" Version="8.0.4" />
     <PackageReference Include="microsoft.data.sqlclient" Version="5.2.0" />
     <PackageReference Include="microsoft.entityframeworkcore" Version="8.0.4" />
     <PackageReference Include="microsoft.entityframeworkcore.design" Version="8.0.4">

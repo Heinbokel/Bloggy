@@ -34,6 +34,10 @@ namespace Bloggy.Exceptions {
                 errorDetails.StatusCode = (int) HttpStatusCode.BadRequest;
                 errorDetails.Message = GenerateInvalidInputMessage((InvalidInputException)exception);
                 errorDetails.ExceptionMessage = exception.Message;
+            } else if (exception is InvalidLoginException) {
+                errorDetails.StatusCode = (int) HttpStatusCode.Forbidden;
+                errorDetails.Message = "Resource is forbidden.";
+                errorDetails.ExceptionMessage = exception.Message;
             } else {
                 errorDetails.StatusCode = (int) HttpStatusCode.InternalServerError;
                 errorDetails.Message = "Something went wrong.";

@@ -38,4 +38,17 @@ public class UsersController: ControllerBase {
         return this.UserService.RegisterUser(request);
     }
 
+    [HttpPost("login", Name = "Login")]
+    public LoginResponse Login([FromBody]LoginRequest request) {
+        // The ModelState is automatically populated by .NET during model binding and validation of the LoginRequest.
+        // This request comes from the HTTP request's body. After validating against the validation attributes (like [Required] etc.)
+        // This ModelState will contain any validation errors that occurred. 
+        if (!ModelState.IsValid) {
+            // If the model state is invalid, it means the user entered an invalid value for one of the fields.
+            // When this happens, we throw our custom InvalidInputException, which returns a 400 from our GlobalExceptionHandler.
+            throw new InvalidInputException("Login Request is not valid.", ModelState);
+        }
+        return this.UserService.Login(request);
+    }
+
 }
