@@ -1,6 +1,7 @@
 using Bloggy.Exceptions;
 using Bloggy.Models;
 using Bloggy.Repositories;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bloggy.Services;
@@ -11,14 +12,17 @@ namespace Bloggy.Services;
 public class UserService
 {
     private readonly BloggyDbContext BloggyDbContext;
+    private readonly JwtService JwtService;
 
     /// <summary>
     /// Constructor for dependency injection.
     /// </summary>
     /// <param name="bloggyDbContext">The BloggyDbContext to provide to this class.</param>
-    public UserService(BloggyDbContext bloggyDbContext)
+    /// <param name="jwtService">The JwtService to provide to this class.</param>
+    public UserService(BloggyDbContext bloggyDbContext, JwtService jwtService)
     {
         this.BloggyDbContext = bloggyDbContext;
+        this.JwtService = jwtService;
     }
 
     /// <summary>
@@ -73,10 +77,47 @@ public class UserService
                 return userToRegister;
             }
             throw new UserAlreadyRegisteredException($"Username: {request.UserName} or Email: {request.Email} is unavailable.");
-
         }
-
         throw new EntityNotFoundException($"User Role {request.UserRoleId} could not be found.");
+    }
+
+    [HttpPost("Login", Name = "Login")]
+    public LoginResponse Login(LoginRequest request) {
+        // Attempt to retrieve the user associated with the sent in email.
+        User? userToAuthenticate = this.RetrieveUserByEmail(request.Email);
+
+        // If the user is not found, just tell the user the credentials were invalid.
+        // We throw our custom InvalidLoginException and the frontend should tell the user
+        // that the credentials were invalid. Not that the user wasn't found, because we don't want
+        // a bad actor to know what accounts exist and don't exist.
+        if (userToAuthenticate == null) {
+            throw new InvalidLoginException($"Credentials were invalid.");
+        } else {
+            // If we are here, it means a user with the given email exists.
+            // We now need to verify the login request's password against the one in the database.
+            // But we need to salt and hash the login request's password the same exact way we did when
+            // the user created the account, so that we are comparing apples to apples.
+            // We should never be able to know what a user's password is, even the passwords in our database, 
+            // so we can't simply dehash the stored password.
+            string hashedRequestPassword = PasswordService.HashPassword(request.Password, userToAuthenticate.Salt);
+            if (hashedRequestPassword == userToAuthenticate.Password) {
+                // If we are here, it means the user passed in the correct password. Now we must generate the 
+                // JWT (JSON Web Token) containing their user details to send back in the HTTP Response.
+                string jwt = this.JwtService.GenerateJwtSecurityTokenFromUser(userToAuthenticate);
+                return new LoginResponse{Token = jwt};
+            } else {
+                // If we are here, the user entered an email that exists, but the incorrect password.
+                // So we will just throw our InvalidLoginException stating a generic error phrase.
+                throw new InvalidLoginException("Credentials were invalid.");
+            }
+        }
+    }
+
+    private User? RetrieveUserByEmail(string email)
+    {
+        return this.BloggyDbContext.Users
+        .Include(user => user.UserRole)
+        .FirstOrDefault(user => user.Email.ToUpper() == email.ToUpper());
     }
 
     /// <summary>

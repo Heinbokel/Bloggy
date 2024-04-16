@@ -15,6 +15,7 @@ builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
 // Register our classes that we want to provide via constructor dependency injection.
 builder.Services.AddScoped<BloggyDbContext>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<JwtService>();
 
 // Exception Handler
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
