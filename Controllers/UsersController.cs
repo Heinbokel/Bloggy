@@ -38,6 +38,12 @@ public class UsersController: ControllerBase {
         return this.UserService.RegisterUser(request);
     }
 
+    /// <summary>
+    /// Attempts to authenticate the user using the LoginRequest's credentials, returning a response containing
+    /// a JWT if authentication is successful.
+    /// </summary>
+    /// <param name="request">The LoginRequest to use.</param>
+    /// <returns>The LoginResponse containing the generated JWT token./returns>
     [HttpPost("login", Name = "Login")]
     public LoginResponse Login([FromBody]LoginRequest request) {
         // The ModelState is automatically populated by .NET during model binding and validation of the LoginRequest.

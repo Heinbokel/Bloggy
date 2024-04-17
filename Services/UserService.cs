@@ -81,6 +81,11 @@ public class UserService
         }
     }
 
+    /// <summary>
+    /// Attempts to authenticate a user and returns a response containing a JWT if successful.
+    /// </summary>
+    /// <param name="request">The LoginRequest to authenticate.</param>
+    /// <returns>The LoginResponse containing a JWT to return.</returns>
     [HttpPost("Login", Name = "Login")]
     public LoginResponse Login(LoginRequest request)
     {
