@@ -7,16 +7,30 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bloggy.Services;
 
+/// <summary>
+/// Business Logic for working with BlogPost entities.
+/// </summary>
 public class BlogService {
 
     private readonly BloggyDbContext BloggyDbContext;
     private readonly UserService UserService;
 
+    /// <summary>
+    /// Constructor for dependency injection.
+    /// </summary>
+    /// <param name="context">The BloggyDbContext to provide to this class.</param>
+    /// <param name="userService">The UserService to provide to this class.</param>
     public BlogService(BloggyDbContext context, UserService userService) {
         this.BloggyDbContext = context;
         this.UserService = userService;
     }
 
+    /// <summary>
+    /// Saves a Blog Post to the database.
+    /// </summary>
+    /// <param name="request">The BlogPostSaveRequest to use.</param>
+    /// <param name="userId">The ID of the signed on user.</param>
+    /// <returns>The saved/created BlogPost to return.</returns>
     public BlogPost CreateBlogPost(BlogPostSaveRequest request, int userId) {
         // Retrieve User from User ID which was taken from the JWT.
         User? userForBlogPost = this.UserService.RetrieveUserById(userId);

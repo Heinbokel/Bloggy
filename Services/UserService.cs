@@ -125,6 +125,11 @@ public class UserService
         }
     }
 
+    /// <summary>
+    /// Retrieves a user by the passed in user ID.
+    /// </summary>
+    /// <param name="id">The ID of the user to retrieve.</param>
+    /// <returns>The User to return, or null if not found.</returns>
     public User? RetrieveUserById(int id)
     {
         try {
@@ -136,6 +141,11 @@ public class UserService
         }
     }
 
+    /// <summary>
+    /// Retrieves a user by the passed in email.
+    /// </summary>
+    /// <param name="email">The email of the user to retrieve.</param>
+    /// <returns>The User to return, or null if not found.</returns>
     private User? RetrieveUserByEmail(string email)
     {
         try {
