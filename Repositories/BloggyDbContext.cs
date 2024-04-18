@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bloggy.Repositories;
 
+/// <summary>
+/// DbContext for the Bloggy application.
+/// </summary>
 public class BloggyDbContext: DbContext {
     public IConfiguration Configuration {get; set;}
 
@@ -11,10 +14,18 @@ public class BloggyDbContext: DbContext {
     public DbSet<UserRole> UserRoles { get; set;}
     public DbSet<BlogPost> BlogPosts { get; set;}
 
+    /// <summary>
+    /// Constructor for dependency injection.
+    /// </summary>
+    /// <param name="configuration">The IConfiguration to provide to this class.</param>
     public BloggyDbContext(IConfiguration configuration) {
         Configuration = configuration;
     }
 
+    /// <summary>
+    /// Logic used to configure the DbContext.
+    /// </summary>
+    /// <param name="optionsBuilder">The DbContextOptionsBuilder to use.</param>
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
         optionsBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
 
@@ -23,6 +34,10 @@ public class BloggyDbContext: DbContext {
         optionsBuilder.EnableDetailedErrors();
     }
 
+    /// <summary>
+    /// Logic to run when creating models/migrations.
+    /// </summary>
+    /// <param name="builder">The ModelBuilder to use.</param>
     protected override void OnModelCreating(ModelBuilder builder) {
         base.OnModelCreating(builder);
 

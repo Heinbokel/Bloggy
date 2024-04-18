@@ -15,12 +15,21 @@ public class BlogPostsController : ControllerBase
 {
     private readonly BlogService BlogService;
 
+    /// <summary>
+    /// Constructor for dependency injection.
+    /// </summary>
+    /// <param name="blogService">The BlogService to provide to this class.</param>
     public BlogPostsController(BlogService blogService)
     {
         this.BlogService = blogService;
     }
 
-    [Authorize]
+    /// <summary>
+    /// Creates/Saves a new Blog Post tied to the signed on user.
+    /// </summary>
+    /// <param name="request">The BlogPostSaveRequest to use.</param>
+    /// <returns>The created BlogPost to return.</returns>
+    [Authorize] // This attribute means that the request must be authenticated or this fails.
     [HttpPost("blog-posts", Name = "CreateBlogPost")]
     public BlogPost CreateBlogPost([FromBody] BlogPostSaveRequest request)
     {

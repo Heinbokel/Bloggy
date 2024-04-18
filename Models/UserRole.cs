@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Bloggy.Models;
 
 /// <summary>
@@ -11,6 +13,7 @@ public class UserRole {
 
     // Navigation Properties. 
     // One UserRole can belong to many Users.
+    [JsonIgnore]
     public List<User> Users{ get; set;}
 
 }
