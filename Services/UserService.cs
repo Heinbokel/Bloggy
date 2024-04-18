@@ -125,6 +125,17 @@ public class UserService
         }
     }
 
+    public User? RetrieveUserById(int id)
+    {
+        try {
+            return this.BloggyDbContext.Users
+            .Include(user => user.UserRole)
+            .FirstOrDefault(user => user.Id == id);
+        } catch (DbException exception) {
+            throw new GeneralDatabaseException($"Error occurred retrieving user with ID {id}", exception);
+        }
+    }
+
     private User? RetrieveUserByEmail(string email)
     {
         try {
@@ -132,7 +143,7 @@ public class UserService
             .Include(user => user.UserRole)
             .FirstOrDefault(user => user.Email.ToUpper() == email.ToUpper());
         } catch (DbException exception) {
-            throw new GeneralDatabaseException($"{exception.Message}", exception);
+            throw new GeneralDatabaseException($"Error occurred retrieving user with email {email}", exception);
         }
     }
 

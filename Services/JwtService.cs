@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Bloggy.Exceptions;
 using Bloggy.Models;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualBasic;
@@ -70,4 +71,26 @@ public class JwtService
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
+    /// <summary>
+    /// Retrieves the user's ID from the given HttpContext/claims.
+    /// </summary>
+    /// <param name="httpContext">The HttpContext to retrieve the identity from.</param>
+    /// <returns>The user's ID as an int.</returns>
+    public static int GetUserIdFromHttpContext(HttpContext httpContext)
+    {
+        ClaimsIdentity? identity = httpContext.User.Identity as ClaimsIdentity;
+
+        if (identity == null || !identity.IsAuthenticated)
+        {
+            throw new InvalidLoginException("User identity is invalid or not authenticated.");
+        }
+
+        Claim? userIdClaim = identity.FindFirst("id");
+        if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId))
+        {
+            throw new InvalidLoginException("User ID claim is missing or invalid.");
+        }
+
+        return userId;
+    }
 }
