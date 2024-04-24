@@ -1,3 +1,4 @@
+using System.Data.Common;
 using Bloggy.Exceptions;
 using Bloggy.Models;
 using Bloggy.Repositories;
@@ -61,4 +62,16 @@ public class BlogService {
         }
     }
 
+    /// <summary>
+    /// Retrieves all blog posts.
+    /// </summary>
+    /// <returns>The list of blog posts to return.</returns>
+    public List<BlogPost> RetrieveBlogPosts()
+    {
+        try {
+            return this.BloggyDbContext.BlogPosts.ToList();
+        } catch (DbException exception) {
+            throw new GeneralDatabaseException("An error occurred when attempting to retrieve all blog posts.", exception);
+        }
+    }
 }

@@ -56,4 +56,14 @@ public class BlogPostsController : ControllerBase
         return BlogService.CreateBlogPost(request, userId);
     }
 
+    /// <summary>
+    /// Retrieves all blog posts.
+    /// </summary>
+    /// <returns>The list of blog posts to return.</returns>
+    [Authorize]
+    [HttpGet("blog-posts", Name = "RetrieveBlogPosts")]
+    public List<BlogPost> RetrieveBlogPosts() {
+        return BlogService.RetrieveBlogPosts();
+    }
+
 }
