@@ -5,7 +5,18 @@ using Bloggy.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
+var DefaultCorsPolicy = "DefaultCorsPolicy";
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options => {
+    options.AddPolicy(name: DefaultCorsPolicy,
+        policy => {
+            policy.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+        });
+});
 
 // Adds our Controllers to our container and configures our [ApiController] behavior.
 builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
@@ -52,6 +63,7 @@ if (app.Environment.IsDevelopment())
 }
 
 // Middleware
+app.UseCors(DefaultCorsPolicy);
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
